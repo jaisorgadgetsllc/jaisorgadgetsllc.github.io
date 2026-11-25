@@ -72,12 +72,16 @@ function siteShell(): Plugin {
         html
           .replace("<!-- shell:head -->", SHARED_HEAD)
           .replaceAll("%ORIGIN%", SITE_ORIGIN)
-          // Vite always adds `crossorigin` to the module script/preload/
+          // Vite always adds `crossorigin` to the module script / preload /
           // stylesheet tags it emits. Everything here is same-origin static
-          // hosting with no SRI in play, so strip it. The Google Fonts
-          // preconnect keeps its own (it is written as `crossorigin />`
-          // inside SHARED_HEAD and restored below).
-          .replace(/\s+crossorigin(?=[\s>])(?! \/>)/g, "")
+          // hosting with no SRI in play, so strip it from exactly those
+          // tags. Matching them by tag (not by attribute spacing) leaves the
+          // Google Fonts preconnect's `crossorigin` alone; that one is
+          // required for the font fetch to reuse the connection.
+          .replace(
+            /(<(?:script type="module"|link rel="(?:stylesheet|modulepreload)"))\s+crossorigin\b/g,
+            "$1",
+          )
       );
     },
     generateBundle() {

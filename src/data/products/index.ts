@@ -80,12 +80,18 @@ export function formatPrice(price: number | null) {
   return price === null ? "See Etsy" : `$${price}`;
 }
 
-/** "from $10", or "Price on Etsy" when no price is recorded. */
+/**
+ * Card price line. "from $10" only when every option's price is known;
+ * if any option is "See Etsy", a floor would be a guess, so name the
+ * cheapest known option instead ("$24 / 2x200mA kit"). "Price on Etsy"
+ * when nothing is recorded.
+ */
 export function priceFrom(p: Product) {
-  const known = p.prices.flatMap((l) => (l.price === null ? [] : [l.price]));
+  const known = p.prices.filter((l): l is PriceLine & { price: number } => l.price !== null);
   if (known.length === 0) return "Price on Etsy";
-  const min = Math.min(...known);
-  return p.prices.length > 1 ? `from $${min}` : `$${min}`;
+  const cheapest = known.reduce((a, b) => (b.price < a.price ? b : a));
+  if (known.length < p.prices.length) return `$${cheapest.price} / ${cheapest.label}`;
+  return known.length > 1 ? `from $${cheapest.price}` : `$${cheapest.price}`;
 }
 
 /** Products on the drawing board: shown in the catalog, no page, no price. */

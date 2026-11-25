@@ -7,6 +7,7 @@ import { ProductCard } from "../components/ProductCard";
 import { news } from "../data/news";
 import { products } from "../data/products";
 import { site } from "../data/site";
+import { linkProps } from "../lib/links";
 
 /** How many news items the home page slot shows. */
 const NEWS_ON_HOME = 3;
@@ -109,7 +110,7 @@ export function HomePage() {
             <a href="/support/#open-designs" className="btn btn-outline hud hud-sm hud-link hud-gold text-gold">
               Open designs
             </a>
-            <a href={site.etsyShop} target="_blank" rel="noreferrer" className="btn btn-gold">
+            <a {...linkProps(site.etsyShop)} className="btn btn-gold">
               <SiEtsy aria-hidden className="size-4" />
               Shop on Etsy
             </a>
@@ -132,7 +133,7 @@ function Hero() {
           <p className="mt-4 font-mono text-sm tracking-[0.18em] text-gold uppercase">{site.tagline}</p>
           <p className="mt-5 max-w-xl text-base sm:text-lg">{site.pitch}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href={site.etsyShop} target="_blank" rel="noreferrer" className="btn btn-gold">
+            <a {...linkProps(site.etsyShop)} className="btn btn-gold">
               <SiEtsy aria-hidden className="size-4" />
               Enter the Etsy shop
             </a>

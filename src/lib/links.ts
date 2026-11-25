@@ -1,6 +1,6 @@
-/** True for http(s) URLs: these open in a new tab. */
+/** True for http(s) and protocol-relative (`//host`) URLs: these open in a new tab. */
 export function isExternal(href: string) {
-  return /^https?:\/\//i.test(href);
+  return /^(https?:)?\/\//i.test(href);
 }
 
 /**

@@ -5,7 +5,8 @@ import { productBySlug } from "./data/products";
 import { AboutPage } from "./pages/AboutPage";
 import { HomePage } from "./pages/HomePage";
 import { NewsPage } from "./pages/NewsPage";
-import { ProductNotFound, ProductPage } from "./pages/ProductPage";
+import { NotFound } from "./components/NotFound";
+import { ProductPage } from "./pages/ProductPage";
 import { ProductsPage } from "./pages/ProductsPage";
 import { SupportPage } from "./pages/SupportPage";
 
@@ -24,7 +25,11 @@ function render(): ReactNode {
       return <ProductsPage />;
     case "product": {
       const product = productBySlug.get(slug ?? "");
-      return product ? <ProductPage product={product} /> : <ProductNotFound />;
+      return product ? (
+        <ProductPage product={product} />
+      ) : (
+        <NotFound current="products" title="Product not found" backHref="/products/" backLabel="All products" />
+      );
     }
     case "news":
       return <NewsPage />;
@@ -32,8 +37,11 @@ function render(): ReactNode {
       return <SupportPage />;
     case "about":
       return <AboutPage />;
-    default:
+    case "home":
       return <HomePage />;
+    default:
+      // A shell with a missing or misspelled data-page: fail visibly.
+      return <NotFound />;
   }
 }
 

@@ -85,9 +85,7 @@ function SiteHeader({ current }: { current: NavId }) {
             );
           })}
           <a
-            href={site.etsyShop}
-            target="_blank"
-            rel="noreferrer"
+            {...linkProps(site.etsyShop)}
             className="btn btn-sm btn-gold my-auto ml-3"
           >
             <SiEtsy aria-hidden className="size-3.5" />
@@ -124,7 +122,7 @@ function SiteHeader({ current }: { current: NavId }) {
               </li>
             ))}
             <li className="pt-2">
-              <a href={site.etsyShop} target="_blank" rel="noreferrer" className="btn btn-gold w-full">
+              <a {...linkProps(site.etsyShop)} className="btn btn-gold w-full">
                 <SiEtsy aria-hidden className="size-4" />
                 Shop on Etsy
               </a>

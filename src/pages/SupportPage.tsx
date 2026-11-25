@@ -19,6 +19,7 @@ import { guideById } from "../data/guides";
 import { productHref, products, upcoming } from "../data/products";
 import { mailto, site } from "../data/site";
 import { faqs, policies } from "../data/support";
+import { linkProps } from "../lib/links";
 
 const tiles: { href: string; label: string; icon: LucideIcon }[] = [
   { href: "#guides", label: "Guides & downloads", icon: FileText },
@@ -38,12 +39,17 @@ export function SupportPage() {
   const match = (...texts: (string | undefined)[]) =>
     q === "" || texts.some((t) => t?.toLowerCase().includes(q));
 
+  const shownFaqs = faqs.filter((f) => match(f.q, f.a));
+  // A product whose FAQ answers match stays visible too, so searching
+  // "waterproof" keeps the case's guides next to the answer.
+  const faqProducts = new Set(q === "" ? [] : shownFaqs.flatMap((f) => f.products ?? []));
   const resourceCards = products
     .map((p) => ({ p, guides: p.guides.flatMap((id) => guideById.get(id) ?? []) }))
-    .filter(({ p, guides }) =>
-      match(p.name, p.model, p.summary, ...guides.flatMap((g) => [g.title, g.description])),
+    .filter(
+      ({ p, guides }) =>
+        faqProducts.has(p.slug) ||
+        match(p.name, p.model, p.summary, ...guides.flatMap((g) => [g.title, g.description])),
     );
-  const shownFaqs = faqs.filter((f) => match(f.q, f.a));
 
   return (
     <Layout current="support">
@@ -134,7 +140,7 @@ export function SupportPage() {
                 ))}
                 {p.openDesign?.makerworld && (
                   <li>
-                    <a href={p.openDesign.makerworld} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-gold hover:text-frost">
+                    <a {...linkProps(p.openDesign.makerworld)} className="flex items-center gap-2 text-gold hover:text-frost">
                       <Box aria-hidden className="size-4" />
                       3D model
                       <span className="sr-only">: {p.name} on MakerWorld</span>
@@ -143,7 +149,7 @@ export function SupportPage() {
                 )}
                 {p.openDesign?.github && (
                   <li>
-                    <a href={p.openDesign.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-gold hover:text-frost">
+                    <a {...linkProps(p.openDesign.github)} className="flex items-center gap-2 text-gold hover:text-frost">
                       <SiGithub aria-hidden className="size-4" />
                       Source
                       <span className="sr-only">: {p.name} on GitHub</span>
@@ -161,7 +167,10 @@ export function SupportPage() {
         {shownFaqs.length === 0 && <p className="text-dim">No questions match.</p>}
         <div className="max-w-4xl space-y-3">
           {shownFaqs.map((f) => (
-            <details key={f.q} className="group hud hud-dim hud-sm" open={q !== ""}>
+            // Keyed on "searching or not": entering or clearing a search
+            // remounts the item (open while searching, closed after), and
+            // typing within a search leaves the user's own toggles alone.
+            <details key={`${f.q}|${q !== ""}`} className="group hud hud-dim hud-sm" open={q !== ""}>
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-frost [&::-webkit-details-marker]:hidden">
                 <span className="font-semibold">{f.q}</span>
                 <ChevronDown aria-hidden className="size-4 shrink-0 text-cyan transition group-open:rotate-180" />
@@ -193,7 +202,7 @@ export function SupportPage() {
             .concat(upcoming.map((u) => ({ key: u.name, label: u.name, kind: "In development, GitHub", href: u.href, icon: "gh" as const })))
             .map((d) => (
               <li key={d.key}>
-                <a href={d.href} target="_blank" rel="noreferrer" className="hud hud-gold hud-sm hud-link flex items-center gap-4 px-5 py-4">
+                <a {...linkProps(d.href)} className="hud hud-gold hud-sm hud-link flex items-center gap-4 px-5 py-4">
                   {d.icon === "gh" ? (
                     <SiGithub aria-hidden className="size-5 shrink-0 text-gold" />
                   ) : (
@@ -236,7 +245,7 @@ export function SupportPage() {
               <span className="text-frost">{site.email}</span>
             </span>
           </a>
-          <a href={site.etsyShop} target="_blank" rel="noreferrer" className="hud hud-link flex items-center gap-4 p-6">
+          <a {...linkProps(site.etsyShop)} className="hud hud-link flex items-center gap-4 p-6">
             <MessageSquare aria-hidden className="size-7 shrink-0 text-cyan" />
             <span>
               <span className="block font-mono text-xs tracking-[0.18em] text-dim uppercase">Order questions</span>

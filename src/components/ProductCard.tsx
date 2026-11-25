@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { SiEtsy } from "react-icons/si";
 import { priceFrom, productHref, type Product, type ProductImage } from "../data/products";
+import { linkProps } from "../lib/links";
 
 /**
  * Catalog / home tile. Not one big anchor: the image and title link to
@@ -44,7 +45,7 @@ export function ProductCard({ product, headingLevel = 3 }: { product: Product; h
               Details
               <ArrowRight aria-hidden className="size-3.5" />
             </a>
-            <a href={product.etsyUrl} target="_blank" rel="noreferrer" className="btn btn-sm btn-signal">
+            <a {...linkProps(product.etsyUrl)} className="btn btn-sm btn-signal">
               <SiEtsy aria-hidden className="size-3" />
               Buy
               <span className="sr-only"> {product.name} on Etsy</span>

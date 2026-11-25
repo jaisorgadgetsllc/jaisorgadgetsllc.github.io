@@ -1,6 +1,7 @@
 import { SiEtsy } from "react-icons/si";
 import { Layout, SectionHeading } from "../components/Layout";
 import { mailto, site } from "../data/site";
+import { linkProps } from "../lib/links";
 
 const facts: { label: string; value: string; href?: string }[] = [
   { label: "Company", value: `${site.legalName}, a California LLC` },
@@ -43,7 +44,7 @@ export function AboutPage() {
               runs Meshtastic nodes in Southern California.
             </p>
             <div className="flex flex-wrap gap-3 pt-3">
-              <a href={site.etsyShop} target="_blank" rel="noreferrer" className="btn btn-gold">
+              <a {...linkProps(site.etsyShop)} className="btn btn-gold">
                 <SiEtsy aria-hidden className="size-4" />
                 Visit the Etsy shop
               </a>
@@ -63,11 +64,7 @@ export function AboutPage() {
                   <dt className="font-mono text-xs tracking-wider text-dim uppercase">{f.label}</dt>
                   <dd className="break-words text-frost">
                     {f.href ? (
-                      <a
-                        href={f.href}
-                        {...(f.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
-                        className="prose-link"
-                      >
+                      <a {...linkProps(f.href)} className="prose-link">
                         {f.value}
                       </a>
                     ) : (

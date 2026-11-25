@@ -8,6 +8,7 @@ import { ProductArt } from "../components/ProductCard";
 import { guideById } from "../data/guides";
 import { formatPrice, type Product } from "../data/products";
 import { site } from "../data/site";
+import { linkProps } from "../lib/links";
 
 export function ProductPage({ product }: { product: Product }) {
   const productGuides = product.guides.flatMap((id) => guideById.get(id) ?? []);
@@ -75,7 +76,7 @@ export function ProductPage({ product }: { product: Product }) {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <a href={product.etsyUrl} target="_blank" rel="noreferrer" className="btn btn-signal">
+            <a {...linkProps(product.etsyUrl)} className="btn btn-signal">
               <SiEtsy aria-hidden className="size-4" />
               Buy on Etsy
             </a>
@@ -151,7 +152,7 @@ export function ProductPage({ product }: { product: Product }) {
               <ul className="mt-4 space-y-2 text-sm">
                 {od.makerworld && (
                   <li>
-                    <a href={od.makerworld} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-gold hover:text-frost">
+                    <a {...linkProps(od.makerworld)} className="flex items-center gap-2 text-gold hover:text-frost">
                       <Box aria-hidden className="size-4" />
                       Free 3D model on MakerWorld
                       <ExternalLink aria-hidden className="size-3.5" />
@@ -160,7 +161,7 @@ export function ProductPage({ product }: { product: Product }) {
                 )}
                 {od.github && (
                   <li>
-                    <a href={od.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-gold hover:text-frost">
+                    <a {...linkProps(od.github)} className="flex items-center gap-2 text-gold hover:text-frost">
                       <SiGithub aria-hidden className="size-4" />
                       Design files on GitHub
                       <ExternalLink aria-hidden className="size-3.5" />
@@ -215,19 +216,5 @@ function Gallery({ product }: { product: Product }) {
         </ul>
       )}
     </div>
-  );
-}
-
-export function ProductNotFound() {
-  return (
-    <Layout current="products">
-      <div className="py-24 text-center">
-        <p className="kicker">{"// 404"}</p>
-        <h1 className="mt-3 text-3xl font-extrabold uppercase">Product not found</h1>
-        <a href="/products/" className="btn btn-outline hud hud-sm hud-link mt-8">
-          All products
-        </a>
-      </div>
-    </Layout>
   );
 }

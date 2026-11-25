@@ -4,6 +4,7 @@ import { SiGithub } from "react-icons/si";
 import { Layout, SectionHeading } from "../components/Layout";
 import { ProductCard } from "../components/ProductCard";
 import { categories, products, upcoming, type CategoryId } from "../data/products";
+import { linkProps } from "../lib/links";
 
 const categoryIcon: Record<CategoryId, LucideIcon> = {
   "mesh-cases": RadioTower,
@@ -88,9 +89,7 @@ export function ProductsPage() {
                       <h3 className="mt-3 text-base font-bold uppercase">{u.name}</h3>
                       <p className="mt-2 text-sm">{u.summary}</p>
                       <a
-                        href={u.href}
-                        target="_blank"
-                        rel="noreferrer"
+                        {...linkProps(u.href)}
                         className="mt-auto flex items-center gap-2 pt-4 font-mono text-xs tracking-[0.15em] text-magenta uppercase hover:text-frost"
                       >
                         <SiGithub aria-hidden className="size-4" />
