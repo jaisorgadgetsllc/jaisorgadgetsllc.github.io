@@ -1,0 +1,61 @@
+PROPRIETARY LICENSE
+
+Copyright (c) 2026 Jaisor Gadgets LLC. All rights reserved.
+
+1. Ownership
+
+This repository and everything in it, including source code, page markup,
+stylesheets, build configuration, written content, product photographs,
+graphics, logos, wireframes and documents (together, the "Materials"), are
+the exclusive property of Jaisor Gadgets LLC, a California limited liability
+company ("the Company"), and are protected by copyright and other laws.
+
+2. No license granted
+
+No license or other right is granted to any person, by implication,
+estoppel or otherwise, to use, copy, modify, merge, publish, distribute,
+sublicense, sell, or create derivative works from the Materials, in whole
+or in part, except with the Company's prior written permission.
+
+3. Confidentiality
+
+This repository is private. Access to it does not grant any license.
+Anyone given access must keep the Materials confidential and use them only
+for work the Company has authorized.
+
+4. The published website
+
+The website built from this repository may be viewed in a web browser for
+personal, non-commercial purposes. Viewing it grants no other rights in its
+content, code, images or design.
+
+5. Trademarks
+
+"Jaisor Gadgets", "JaisorGadgets", the J hexagon mark and the related logos
+are trademarks of the Company. Nothing in this file grants any right to use
+them.
+
+6. Third-party components
+
+Third-party software installed as dependencies (listed in package.json)
+and the fonts the website loads (Orbitron and Share Tech Mono, SIL Open
+Font License 1.1, served by Google Fonts) remain under their own licenses.
+Nothing in this file restricts any right granted by those licenses.
+
+7. Separately published open designs
+
+Some products are based on designs that Jordan Marinov publishes
+separately under open licenses, for example 3D models on MakerWorld and
+circuit board design files on GitHub. Those designs are governed by the
+licenses at their source, not by this file. This file covers only the
+Materials in this repository.
+
+8. Disclaimer
+
+THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL
+THE COMPANY BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE MATERIALS OR THEIR USE.
+
+Permission requests: jaisorgadgets.llc@gmail.com

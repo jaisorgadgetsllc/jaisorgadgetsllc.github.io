@@ -1,0 +1,211 @@
+@import "tailwindcss";
+
+/*
+ * Brand tokens. `--color-*: initial` drops Tailwind's default palette, so
+ * only these colors exist as utilities (`text-cyan`, `bg-panel`,
+ * `border-line`, `text-gold/70` ...). That is deliberate: the brand has
+ * four hues and a set of neutrals, and the compiler-level absence of
+ * `text-blue-500` & co. keeps it that way. See CLAUDE.md > Design system.
+ */
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-black: #000;
+  --color-white: #fff;
+
+  /* Neutrals */
+  --color-ink: #05070c; /* page background */
+  --color-panel: #080c16; /* opaque panel fill */
+  --color-raised: #0d1422; /* inputs, table stripes, thumbnails */
+  --color-line: #1c2a42; /* hairlines and idle outlines */
+  --color-frost: #f0f8ff; /* primary text on dark */
+  --color-haze: #a3b3c6; /* body text */
+  --color-dim: #64768e; /* captions, meta */
+
+  /* Accents */
+  --color-cyan: #2ec4f1; /* primary accent: outlines, links, glow */
+  --color-magenta: #c45a9e; /* news / what's new (logo "GADGETS") */
+  --color-gold: #ddb256; /* badges, primary CTA (logo "J") */
+  --color-signal: #ff2b2b; /* accent bars, Buy buttons, warnings */
+  --color-logo: #56c2cf; /* the logo's own cyan; logo artwork only */
+
+  --font-display: "Orbitron", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Share Tech Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --font-sans: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem; /* clears the sticky header on #anchor jumps */
+  }
+
+  body {
+    @apply bg-ink font-sans text-haze antialiased;
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display text-frost;
+    letter-spacing: 0.02em;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-cyan) 35%, transparent);
+    color: var(--color-frost);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cyan);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  /*
+   * HUD panel: chamfered top-right and bottom-left corners with a 1px
+   * outline. Two pseudo-layers do the drawing, both clipped to the same
+   * polygon: ::before is the outline color, ::after (inset 1px) is the
+   * fill. The fill must stay opaque or the outline color bleeds through
+   * it. Content sits above both (`isolation` + z-index -1).
+   *
+   *   .hud              cyan outline, 16px cut
+   *   .hud-sm           10px cut (buttons, chips, thumbnails)
+   *   .hud-lg           24px cut (hero panels)
+   *   .hud-magenta / .hud-gold / .hud-signal / .hud-dim   outline color
+   *   .hud-glow         soft outer glow in the outline color
+   *   .hud-link         hover/focus brightens outline and adds glow
+   */
+  .hud {
+    --cut: 16px;
+    --hud-line: color-mix(in srgb, var(--color-cyan) 55%, var(--color-line));
+    --hud-fill: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--color-cyan) 6%, var(--color-panel)),
+      var(--color-panel) 55%
+    );
+    position: relative;
+    isolation: isolate;
+  }
+  .hud::before,
+  .hud::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .hud::before {
+    inset: 0;
+    background: var(--hud-line);
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--cut)) 0,
+      100% var(--cut),
+      100% 100%,
+      var(--cut) 100%,
+      0 calc(100% - var(--cut))
+    );
+    transition: background-color 150ms;
+  }
+  .hud::after {
+    inset: 1px;
+    background: var(--hud-fill);
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--cut) + 0.5px) 0,
+      100% calc(var(--cut) - 0.5px),
+      100% 100%,
+      calc(var(--cut) - 0.5px) 100%,
+      0 calc(100% - var(--cut) + 0.5px)
+    );
+  }
+  .hud-sm {
+    --cut: 10px;
+  }
+  .hud-lg {
+    --cut: 26px;
+  }
+  .hud-magenta {
+    --hud-line: color-mix(in srgb, var(--color-magenta) 70%, var(--color-line));
+    --hud-fill: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--color-magenta) 8%, var(--color-panel)),
+      var(--color-panel) 55%
+    );
+  }
+  .hud-gold {
+    --hud-line: color-mix(in srgb, var(--color-gold) 70%, var(--color-line));
+  }
+  .hud-signal {
+    --hud-line: color-mix(in srgb, var(--color-signal) 70%, var(--color-line));
+  }
+  .hud-dim {
+    --hud-line: var(--color-line);
+  }
+  .hud-glow {
+    filter: drop-shadow(0 0 10px color-mix(in srgb, var(--hud-line) 40%, transparent));
+  }
+  .hud-link {
+    transition: filter 150ms;
+  }
+  .hud-link:hover,
+  .hud-link:focus-visible {
+    --hud-line: var(--color-cyan);
+    filter: drop-shadow(0 0 10px color-mix(in srgb, var(--color-cyan) 45%, transparent));
+  }
+  .hud-link.hud-magenta:hover,
+  .hud-link.hud-magenta:focus-visible {
+    --hud-line: var(--color-magenta);
+    filter: drop-shadow(0 0 10px color-mix(in srgb, var(--color-magenta) 45%, transparent));
+  }
+
+  /*
+   * Buttons. Solid variants are a single clipped box; `.btn-outline` is a
+   * small HUD panel. All share the mono uppercase label style.
+   */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 font-mono text-sm tracking-[0.12em] uppercase transition;
+    --cut: 10px;
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--cut)) 0,
+      100% var(--cut),
+      100% 100%,
+      var(--cut) 100%,
+      0 calc(100% - var(--cut))
+    );
+  }
+  .btn-gold {
+    @apply bg-gold text-ink hover:brightness-110;
+  }
+  .btn-signal {
+    @apply bg-signal text-white hover:brightness-110;
+  }
+  .btn-outline {
+    @apply text-cyan;
+    clip-path: none;
+  }
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+    --cut: 7px;
+  }
+
+  /* `// 01  LABEL` mono kicker over section headings. */
+  .kicker {
+    @apply font-mono text-xs tracking-[0.25em] text-cyan uppercase;
+  }
+
+  /* Inline links inside prose. */
+  .prose-link {
+    @apply text-cyan underline decoration-cyan/40 underline-offset-4 transition hover:decoration-cyan;
+  }
+
+  /* Inline `code` / model numbers inside prose. */
+  .code {
+    @apply bg-raised px-1.5 py-0.5 font-mono text-[0.92em] text-frost;
+  }
+}
