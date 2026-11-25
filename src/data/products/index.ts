@@ -1,5 +1,6 @@
 import type { Block } from "../blocks";
 import type { GuideId } from "../guides";
+import { site } from "../site";
 
 export type CategoryId = "mesh-cases" | "solar" | "boards";
 
@@ -22,6 +23,11 @@ export interface PriceLine {
   /** USD. `null` renders as "See Etsy". */
   price: number | null;
   note?: string;
+  /**
+   * Etsy listing for this option, when it has its own. Falls back to the
+   * product's `etsyUrl`. Use the bare listing URL, no tracking params.
+   */
+  etsyUrl?: string;
 }
 
 export interface Product {
@@ -45,7 +51,10 @@ export interface Product {
    */
   prices: PriceLine[];
   pricesAsOf?: string;
-  /** Listing URL when known, otherwise the shop. */
+  /**
+   * Listing URL for the whole product when known, otherwise the shop.
+   * Options sold as separate listings set their own `etsyUrl` instead.
+   */
   etsyUrl: string;
   /** 4:3 cover for cards. Omit to draw the HUD placeholder. */
   card?: ProductImage;
@@ -56,6 +65,12 @@ export interface Product {
   guides: GuideId[];
   /** Free designs Jordan Marinov publishes personally (not the LLC). */
   openDesign?: { makerworld?: string; github?: string };
+  /**
+   * "coming-soon": not for sale yet. The page shows photos and specs but
+   * no price or Buy button; the catalog lists it under "Coming next" and
+   * the home page leaves it out. Keep `prices` empty.
+   */
+  status?: "coming-soon";
 }
 
 /**
@@ -73,6 +88,12 @@ export const products: Product[] = Object.entries(modules)
   .sort((a, b) => a.order - b.order);
 
 export const productBySlug = new Map(products.map((p) => [p.slug, p]));
+
+export const isComingSoon = (p: Product) => p.status === "coming-soon";
+/** Products on sale: the catalog grid and the home page. */
+export const forSale = products.filter((p) => !isComingSoon(p));
+/** Products with a page but not for sale yet: "Coming next". */
+export const comingSoon = products.filter(isComingSoon);
 
 export const productHref = (slug: string) => `/products/${slug}/`;
 
@@ -92,6 +113,29 @@ export function priceFrom(p: Product) {
   const cheapest = known.reduce((a, b) => (b.price < a.price ? b : a));
   if (known.length < p.prices.length) return `$${cheapest.price} / ${cheapest.label}`;
   return known.length > 1 ? `from $${cheapest.price}` : `$${cheapest.price}`;
+}
+
+/**
+ * Buy buttons for the product page. One per price line when any line has
+ * its own listing (lines without one fall back to the product URL), else a
+ * single button.
+ */
+export function buyLinks(p: Product): { label: string; href: string }[] {
+  if (!p.prices.some((l) => l.etsyUrl)) return [{ label: "", href: p.etsyUrl }];
+  return p.prices.map((l) => ({ label: l.label, href: l.etsyUrl ?? p.etsyUrl }));
+}
+
+/**
+ * The card's single Buy link: the product listing if there is one, else
+ * the listing of the cheapest option that has one (the card shows that
+ * option's price), else the shop.
+ */
+export function primaryBuyUrl(p: Product) {
+  if (p.etsyUrl !== site.etsyShop) return p.etsyUrl;
+  const direct = p.prices
+    .filter((l) => l.etsyUrl)
+    .sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity));
+  return direct[0]?.etsyUrl ?? p.etsyUrl;
 }
 
 /** Products on the drawing board: shown in the catalog, no page, no price. */
