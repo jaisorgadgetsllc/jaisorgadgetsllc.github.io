@@ -1,18 +1,19 @@
 import { useState } from "react";
-import { ChevronRight, Download, ExternalLink, FileText, Box } from "lucide-react";
+import { ChevronRight, Download, ExternalLink, FileText, FlaskConical, Box, Newspaper } from "lucide-react";
 import { SiEtsy, SiGithub } from "react-icons/si";
 import { Blocks } from "../components/Blocks";
 import { Inline } from "../components/Inline";
 import { Layout } from "../components/Layout";
 import { ProductArt } from "../components/ProductCard";
 import { guideById } from "../data/guides";
-import { formatPrice, type Product } from "../data/products";
+import { buyLinks, formatPrice, isComingSoon, type Product } from "../data/products";
 import { site } from "../data/site";
 import { linkProps } from "../lib/links";
 
 export function ProductPage({ product }: { product: Product }) {
   const productGuides = product.guides.flatMap((id) => guideById.get(id) ?? []);
   const od = product.openDesign;
+  const soon = isComingSoon(product);
 
   return (
     <Layout current="products">
@@ -53,7 +54,15 @@ export function ProductPage({ product }: { product: Product }) {
           <p className="mt-5 text-base">{product.summary}</p>
 
           <div className="mt-6 border-t border-line pt-5">
-            {product.prices.length > 0 ? (
+            {soon ? (
+              <div>
+                <p className="flex items-center gap-2 font-mono text-sm tracking-wider text-magenta uppercase">
+                  <FlaskConical aria-hidden className="size-4" />
+                  Coming soon / not for sale yet
+                </p>
+                <p className="mt-2 text-sm">Price, colors and kit contents are not set. Watch the news page for the release.</p>
+              </div>
+            ) : product.prices.length > 0 ? (
               <dl className="space-y-2">
                 {product.prices.map((line) => (
                   <div key={line.label} className="flex items-baseline justify-between gap-4">
@@ -76,10 +85,18 @@ export function ProductPage({ product }: { product: Product }) {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <a {...linkProps(product.etsyUrl)} className="btn btn-signal">
-              <SiEtsy aria-hidden className="size-4" />
-              Buy on Etsy
-            </a>
+            {!soon && buyLinks(product).map((link) => (
+              <a key={link.label} {...linkProps(link.href)} className="btn btn-signal">
+                <SiEtsy aria-hidden className="size-4" />
+                {link.label ? `Buy ${link.label}` : "Buy on Etsy"}
+              </a>
+            ))}
+            {soon && (
+              <a href="/news/" className="btn btn-outline hud hud-sm hud-link">
+                <Newspaper aria-hidden className="size-4" />
+                News
+              </a>
+            )}
             {productGuides.length > 0 && (
               <a href="#downloads" className="btn btn-outline hud hud-sm hud-link">
                 <FileText aria-hidden className="size-4" />

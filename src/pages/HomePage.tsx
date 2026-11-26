@@ -5,7 +5,7 @@ import { Layout, SectionHeading } from "../components/Layout";
 import { NewsCard } from "../components/NewsCard";
 import { ProductCard } from "../components/ProductCard";
 import { news } from "../data/news";
-import { products } from "../data/products";
+import { forSale } from "../data/products";
 import { site } from "../data/site";
 import { linkProps } from "../lib/links";
 
@@ -74,7 +74,7 @@ export function HomePage() {
           <p>For LoRa mesh networks (Meshtastic, MeshCore) and small off-grid builds.</p>
         </SectionHeading>
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          {products.map((p) => (
+          {forSale.map((p) => (
             <ProductCard key={p.slug} product={p} />
           ))}
         </div>

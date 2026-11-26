@@ -3,7 +3,7 @@ import { CircuitBoard, FlaskConical, LayoutGrid, RadioTower, Sun, type LucideIco
 import { SiGithub } from "react-icons/si";
 import { Layout, SectionHeading } from "../components/Layout";
 import { ProductCard } from "../components/ProductCard";
-import { categories, products, upcoming, type CategoryId } from "../data/products";
+import { categories, comingSoon, forSale, upcoming, type CategoryId } from "../data/products";
 import { linkProps } from "../lib/links";
 
 const categoryIcon: Record<CategoryId, LucideIcon> = {
@@ -19,15 +19,15 @@ const categoryIcon: Record<CategoryId, LucideIcon> = {
  */
 export function ProductsPage() {
   const [filter, setFilter] = useState<CategoryId | "all">("all");
-  const shown = filter === "all" ? products : products.filter((p) => p.category === filter);
+  const shown = filter === "all" ? forSale : forSale.filter((p) => p.category === filter);
 
   const options: { id: CategoryId | "all"; label: string; icon: LucideIcon; count: number }[] = [
-    { id: "all", label: "All products", icon: LayoutGrid, count: products.length },
+    { id: "all", label: "All products", icon: LayoutGrid, count: forSale.length },
     ...categories.map((c) => ({
       id: c.id,
       label: c.label,
       icon: categoryIcon[c.id],
-      count: products.filter((p) => p.category === c.id).length,
+      count: forSale.filter((p) => p.category === c.id).length,
     })),
   ];
 
@@ -76,10 +76,13 @@ export function ProductsPage() {
               ))}
             </div>
 
-            {upcoming.length > 0 && (
+            {comingSoon.length + upcoming.length > 0 && (
               <section aria-label="Coming next" className="pt-16">
                 <SectionHeading index="++" kicker="In the lab" title="Coming next" />
                 <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                  {comingSoon.map((p) => (
+                    <ProductCard key={p.slug} product={p} headingLevel={3} />
+                  ))}
                   {upcoming.map((u) => (
                     <div key={u.name} className="hud hud-magenta flex flex-col p-5">
                       <p className="flex items-center gap-2 font-mono text-xs tracking-[0.2em] text-magenta uppercase">

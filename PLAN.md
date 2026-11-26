@@ -32,9 +32,10 @@ land; add new ones at the end of the right phase.
 
 ## Phase 3: Content depth
 
-- [ ] Photos for the Basic Heltec Mesh Node Case (card + gallery)
+- [x] Photos for the Basic Heltec Mesh Node Case (card + gallery)
 - [ ] SNAP v1.2 4x60mA price, colors and kit contents
-- [ ] Assembly guide for SNAP v1.2 and the Basic case (PDF), if made
+- [x] Assembly guides for the Basic case (`T114`, `T096`) and the power-switch belt clip (PDF)
+- [ ] Assembly guide for SNAP v1.2 (PDF), if made
 - [ ] Wiring diagrams / pinouts as their own Support category
 - [ ] Hackaday.io and MakerWorld profile links once public URLs exist
 - [ ] Tindie store: `tindieUrl` field + second buy button when live

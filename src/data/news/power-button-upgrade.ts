@@ -6,7 +6,7 @@ const item: NewsItem = {
   kind: "update",
   title: "Fully built nodes ship with a power button",
   summary:
-    "Every fully built Weather-Resistant Heltec Mesh Node now has a power button on the back of the belt clip.",
+    "Every fully built Weather-Resistant Heltec Mesh Node now has a power switch on the back of the belt clip. Case-only orders can add the power-switch belt clip as an option.",
   product: "weather-resistant-mesh-case",
 };
 

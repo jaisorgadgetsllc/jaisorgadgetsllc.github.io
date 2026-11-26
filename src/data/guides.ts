@@ -3,7 +3,13 @@
  * are stable (printed QR codes and Etsy messages can point at them) and
  * Vite does not fingerprint them. Products reference guides by id.
  */
-export type GuideId = "t114-case" | "t096-case" | "snap-power-controller";
+export type GuideId =
+  | "t114-case"
+  | "t096-case"
+  | "t114-basic-case"
+  | "t096-basic-case"
+  | "switch-clip"
+  | "snap-power-controller";
 
 export interface Guide {
   id: GuideId;
@@ -23,7 +29,7 @@ export const guides: Guide[] = [
       "Parts list, exploded view and 6-step assembly with photos. Includes GPS (L76K) placement.",
     href: "/guides/t114-weather-resistant-case-assembly-guide.pdf",
     pages: 2,
-    sizeLabel: "1.5 MB",
+    sizeLabel: "1.3 MB",
   },
   {
     id: "t096-case",
@@ -32,7 +38,33 @@ export const guides: Guide[] = [
       "Parts list, exploded view and 6-step assembly with photos. Also fits the Heltec Tracker V2.",
     href: "/guides/t096-weather-resistant-case-assembly-guide.pdf",
     pages: 2,
-    sizeLabel: "1.9 MB",
+    sizeLabel: "1.7 MB",
+  },
+  {
+    id: "t114-basic-case",
+    title: "Basic Case Assembly Guide: Heltec T114",
+    description:
+      "Parts and tools photo, 4-step assembly with labeled photos. Includes GPS (L76K) placement.",
+    href: "/guides/t114-basic-case-assembly-guide.pdf",
+    pages: 2,
+    sizeLabel: "1.1 MB",
+  },
+  {
+    id: "t096-basic-case",
+    title: "Basic Case Assembly Guide: Heltec T096",
+    description: "Parts and tools photo, 4-step assembly with labeled photos.",
+    href: "/guides/t096-basic-case-assembly-guide.pdf",
+    pages: 2,
+    sizeLabel: "1.1 MB",
+  },
+  {
+    id: "switch-clip",
+    title: "Belt Clip with Power Switch Assembly Guide",
+    description:
+      "Parts list and wiring for the power-switch belt clip, with photo steps for the Basic and Weather-Resistant cases. Soldering required.",
+    href: "/guides/switch-belt-clip-assembly-guide.pdf",
+    pages: 3,
+    sizeLabel: "0.9 MB",
   },
   {
     id: "snap-power-controller",

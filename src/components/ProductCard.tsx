@@ -1,6 +1,6 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, FlaskConical } from "lucide-react";
 import { SiEtsy } from "react-icons/si";
-import { priceFrom, productHref, type Product, type ProductImage } from "../data/products";
+import { isComingSoon, priceFrom, primaryBuyUrl, productHref, type Product, type ProductImage } from "../data/products";
 import { linkProps } from "../lib/links";
 
 /**
@@ -11,8 +11,9 @@ import { linkProps } from "../lib/links";
 export function ProductCard({ product, headingLevel = 3 }: { product: Product; headingLevel?: 2 | 3 }) {
   const href = productHref(product.slug);
   const H = `h${headingLevel}` as const;
+  const soon = isComingSoon(product);
   return (
-    <article className="hud hud-link group flex flex-col p-3">
+    <article className={`hud hud-link group flex flex-col p-3 ${soon ? "hud-magenta" : ""}`}>
       <a href={href} tabIndex={-1} aria-hidden className="relative block">
         <ProductArt image={product.card} className="aspect-[4/3]" />
         <div className="absolute inset-x-2 top-2 flex flex-wrap gap-1.5">
@@ -39,17 +40,26 @@ export function ProductCard({ product, headingLevel = 3 }: { product: Product; h
         </H>
         <p className="mt-2 line-clamp-3 text-sm">{product.summary}</p>
         <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-5">
-          <p className="font-mono text-lg text-frost">{priceFrom(product)}</p>
+          {soon ? (
+            <p className="flex items-center gap-2 font-mono text-sm tracking-wider text-magenta uppercase">
+              <FlaskConical aria-hidden className="size-4" />
+              Coming soon
+            </p>
+          ) : (
+            <p className="font-mono text-lg text-frost">{priceFrom(product)}</p>
+          )}
           <div className="flex gap-2">
             <a href={href} className="btn btn-sm btn-outline hud hud-sm hud-link">
               Details
               <ArrowRight aria-hidden className="size-3.5" />
             </a>
-            <a {...linkProps(product.etsyUrl)} className="btn btn-sm btn-signal">
-              <SiEtsy aria-hidden className="size-3" />
-              Buy
-              <span className="sr-only"> {product.name} on Etsy</span>
-            </a>
+            {!soon && (
+              <a {...linkProps(primaryBuyUrl(product))} className="btn btn-sm btn-signal">
+                <SiEtsy aria-hidden className="size-3" />
+                Buy
+                <span className="sr-only"> {product.name} on Etsy</span>
+              </a>
+            )}
           </div>
         </div>
       </div>

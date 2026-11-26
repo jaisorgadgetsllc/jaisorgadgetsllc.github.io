@@ -2,14 +2,12 @@ import type { Product } from "./index";
 import { site } from "../site";
 import card from "../../assets/products/snap/card.jpg";
 import featured from "../../assets/products/snap/featured.jpg";
-import collage4x60 from "../../assets/products/snap/4x60ma-collage-4x3.jpg";
 import accessories from "../../assets/products/snap/accessories-tagged-4x3.jpg";
 import buildYourWay from "../../assets/products/snap/build-the-way-you-want-padded.jpg";
 import beigeBrown from "../../assets/products/snap/2x200ma-petg-beige-brown-collage.jpg";
 import greenBeige from "../../assets/products/snap/2x200ma-petg-green-beige-collage.jpg";
 import asaGray from "../../assets/products/snap/2x200ma-asa-gray-collage.jpg";
 import whatsIncluded from "../../assets/products/snap/2x200ma-whats-included-tagged.jpg";
-import exampleBuild from "../../assets/products/snap/4x60ma-example-build-tagged.jpg";
 import weatherproofing from "../../assets/products/snap/weatherproofing-collage.jpg";
 
 const product: Product = {
@@ -28,22 +26,17 @@ const product: Product = {
   badges: ["Kit", "Open design"],
   prices: [
     { label: "2x200mA kit", price: 24 },
-    { label: "4x60mA", price: null },
   ],
   pricesAsOf: "Nov 2026",
   etsyUrl: site.etsyShop,
   card: {
     src: card,
-    alt: "Collage of the four-panel SNAP enclosure: olive-green body with a solar panel on each face, antenna on top, and its parts.",
+    alt: "Olive-green two-panel SNAP on a blue mat, with its swappable port plugs, caps and an antenna on a cable laid out in front.",
   },
   gallery: [
     {
       src: featured,
       alt: "Olive-green SNAP enclosure with a solar panel and a black SMA antenna, mounted outdoors.",
-    },
-    {
-      src: collage4x60,
-      alt: "Labeled collage of the 4x60mA variant: one panel per face, threaded antenna port, bolt-on base.",
     },
     {
       src: accessories,
@@ -67,16 +60,12 @@ const product: Product = {
       alt: "Labeled layout of what is in the 2x200mA kit: printed body, base plate, components grid, accessory plugs, M3 bolts, rubber O-rings.",
     },
     {
-      src: exampleBuild,
-      alt: "Labeled example build: panels, SNAP Power Controller, mesh node board, battery and wiring on the components grid.",
-    },
-    {
       src: weatherproofing,
       alt: "Collage of extra weatherproofing: rubberized sealant and spar urethane coatings applied to the enclosure.",
     },
   ],
   specs: [
-    { label: "Variants", value: "2x200mA (two panels), 4x60mA (one panel per face)" },
+    { label: "Variants", value: "2x200mA (two panels). 4x60mA (four panels) coming soon" },
     { label: "Antenna", value: "Top or bottom; SMA or N-type mount" },
     { label: "Ports", value: "Plug accessories, shared across all SNAP variants" },
     { label: "Panels", value: "Slide into a lip on the top and sides" },
@@ -86,16 +75,16 @@ const product: Product = {
     { kind: "heading", text: "Variants" },
     {
       kind: "table",
-      head: ["", "2x200mA", "4x60mA"],
+      head: ["", "2x200mA", "4x60mA (coming soon)"],
       rows: [
         ["Panels", "Two 200 mA panels", "Four 60 mA panels, one per face"],
         ["Orientation", "Aim the panels at the sun", "Sun from every direction; no need to aim the node"],
         ["Accessory ports", "Top, bottom and side ports", "Two: top and bottom"],
-        ["Kit includes", "Knurled inserts installed in the body", "See the Etsy listing"],
-        ["Colors", "PETG beige body + brown base; PETG olive-green body + beige base; ASA gray", "See the Etsy listing"],
+        ["Kit includes", "Knurled inserts installed in the body", "Not for sale yet"],
+        ["Colors", "PETG beige body + brown base; PETG olive-green body + beige base; ASA gray", "Not set yet"],
       ],
     },
-    "The 4x60mA variant has two accessory ports. Four panel faces leave no room for side ports. That is the tradeoff for the omni panel layout.",
+    "The 4x60mA variant has two accessory ports. Four panel faces leave no room for side ports. That is the tradeoff for the omni panel layout. It is not for sale yet; see the [four-panel SNAP page](/products/snap-4x60ma/) for photos and the free model.",
     { kind: "heading", text: "Antenna placement" },
     {
       kind: "list",

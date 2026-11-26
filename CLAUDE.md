@@ -89,10 +89,10 @@ src/data/
   site.ts             # company facts, Etsy URL, email, nav
   blocks.ts           # Block type
   products/index.ts   # Product type, categories, helpers, `upcoming` list
-  products/<slug>.ts  # one Product per file, auto-discovered
+  products/<slug>.ts  # one Product per file, auto-discovered (`status: "coming-soon"` = not for sale)
   news/index.ts       # NewsItem type + helpers
   news/<slug>.ts      # one item per file, auto-discovered
-  guides.ts           # guide PDFs (files in public/guides/)
+  guides.ts           # guide PDFs (files in public/guides/), incl. the switch belt clip guide
   support.ts          # FAQ + policies
 src/assets/products/<slug>/  # card.jpg (4:3) + gallery photos, imported
 src/assets/home/hero.jpg
@@ -146,14 +146,24 @@ public/
   `NewsItem`. No shell needed (news items are anchors on `/news/`). The
   home page shows the newest `NEWS_ON_HOME` (3). `date` is `YYYY-MM-DD`,
   or `YYYY-MM` when only the month is known; don't invent a day.
-- **Coming-soon products** go in `upcoming` in `data/products/index.ts`
-  (no page, no price).
+- **Coming-soon products**, two kinds:
+  - with photos and specs: a normal product (all four steps above) with
+    `status: "coming-soon"` and `prices: []`. The page shows "Not for sale
+    yet" instead of prices and Buy; the catalog lists it under "Coming
+    next" (not in the grid or category counts); the home page leaves it
+    out. Announce it with a `kind: "upcoming"` news item. Example:
+    `snap-4x60ma`. When it goes on sale, drop `status`, add prices.
+  - idea only (no page): `upcoming` in `data/products/index.ts`.
 - **FAQ / policies:** `data/support.ts`. Policies must match the Etsy
   shop policy; Etsy is the source of truth.
 - **Prices** are "regular Etsy price as of `pricesAsOf`" and are shown with
   that caveat. `price: null` renders "See Etsy". Don't show stock levels.
-- **Etsy links:** `etsyUrl` per product, the shop URL until per-listing
-  URLs are known.
+- **Etsy links:** `etsyUrl` per product (the shop URL until a listing URL
+  is known). When options are separate listings (e.g. case only vs fully
+  built), set `etsyUrl` on that `PriceLine` instead: the product page then
+  shows one Buy button per option, and the card's Buy goes to the
+  cheapest option's listing. Use the bare `etsy.com/listing/<id>/<slug>`
+  URL, no tracking params.
 - **Open designs** (MakerWorld models, GitHub repos) are published by
   Jordan Marinov personally, not the LLC. Always present them as
   "Open designs by Jordan Marinov" / "Published free by Jordan Marinov".
@@ -168,6 +178,16 @@ public/
   Drive `Claude/JaisorGadgets` folder); prefer the `snap-power-controller-*`
   files over the older `scm-*` duplicates. Every image needs real `alt`
   text describing the subject.
+- **`Lum/` folders hold the better photos.** In the owner's Drive, a
+  `Lum/` subfolder holds processed (higher-quality) versions of the photos
+  beside it. When the same shot exists in both, use the `Lum/` copy. The
+  weather-resistant case photos and guide PDFs come from Drive
+  `Claude/MakerWorld/HeltecCase` (`T096/Lum/`, `T114/Lum/` first); the
+  Basic case's from `Claude/MakerWorld/HeltecCase-Basic` (no `Lum/`; color
+  pairs are built from `Palette/`). Skip
+  `*_tagged*`, `Annotated/` and `*Build-Steps*` images and the promo collages there: their small print
+  carries the `JAISOR.NET` footer.
+- Strip EXIF when exporting photos (phone shots carry GPS location).
 
 ## Writing style (site copy)
 
@@ -231,6 +251,11 @@ Futuristic HUD / tech-panel, from the brief (section 6) and the wireframe.
   `public/` or anything `src/` imports.** The repo is private, the output
   is not. Before adding a PDF or image to `public/`, read it and check
   it against the brief's "Do not publish" list.
+  The source guide PDFs in Drive have a `JAISORGADGETS :: JAISOR.NET`
+  footer; the published copies must say only `JAISORGADGETS`. There are no
+  editable sources, so remove the text with a true redaction (PyMuPDF
+  `add_redact_annot` + `apply_redactions`, text removed, images kept),
+  not a white box, and confirm with a text search that it is gone.
 - No `dangerouslySetInnerHTML`, `eval`, `new Function` or HTML-from-string.
   JSON-LD stays hand-written JSON in the shells.
 - External links: `target="_blank" rel="noreferrer"`. Use `linkProps()`
@@ -264,9 +289,8 @@ Resolved Nov 2026: domain (repo rename, above); commerce (link out to
 Etsy only); address (email only, no mailing address); open designs
 (attributed to Jordan Marinov); SNAP Power Controller repo
 (`SNAP_Power_Controller`). Still open: SNAP Power Controller price and
-whether it is listed (the site says "Price on Etsy"); per-listing Etsy
-URLs; Tindie (add a `tindieUrl` field when the store is live); photos for
-the Basic case; exact dates for the seed news items. See [PLAN.md](PLAN.md).
+whether it is listed (the site says "Price on Etsy"); the remaining
+per-listing Etsy URLs (only weather-resistant case-only is set); Tindie (add a `tindieUrl` field when the store is live); exact dates for the seed news items. See [PLAN.md](PLAN.md).
 
 ## Keeping this file current
 
